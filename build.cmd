@@ -86,8 +86,8 @@ rem
 
 where /q nasm.exe || (
   echo Downloading nasm.exe
-  curl.exe -sfLO "https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win64/nasm-%NASM_VERSION%-win64.zip"
-  %SZIP% x -bb0 -y nasm-%NASM_VERSION%-win64.zip nasm-%NASM_VERSION%\nasm.exe 1>nul 2>nul || exit /b 1
+  curl.exe -sfLO "https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win32/nasm-%NASM_VERSION%-win32.zip"
+  %SZIP% x -bb0 -y nasm-%NASM_VERSION%-win32.zip nasm-%NASM_VERSION%\nasm.exe 1>nul 2>nul || exit /b 1
   move nasm-%NASM_VERSION%\nasm.exe nasm.exe
   rd /s /q nasm-%NASM_VERSION%
 )
@@ -95,13 +95,13 @@ nasm.exe --version || exit /b 1
 
 where /q yasm.exe || (
   echo Downloading yasm.exe
-  curl -sfLo yasm.exe https://www.tortall.net/projects/yasm/releases/yasm-%YASM_VERSION%-win64.exe || exit /b 1
+  curl -sfLo yasm.exe https://www.tortall.net/projects/yasm/releases/yasm-%YASM_VERSION%-win32.exe || exit /b 1
 
   if "%GITHUB_WORKFLOW%" neq "" (
     rem Install VS2010 redistributable
-    curl -sfLO https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe || exit /b 1
-    start /wait vcredist_x64.exe /q /norestart
-    del /q vcredist_x64.exe
+    curl -sfLO https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x86.exe || exit /b 1
+    start /wait vcredist_x86.exe /q /norestart
+    del /q vcredist_x86.exe
   )
 )
 yasm.exe --version || exit /b 1
@@ -212,7 +212,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\zlib-%ZLIB_VERSION%             ^
   -B %BUILD%\zlib-%ZLIB_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -236,8 +236,8 @@ rem xz
 rem
 
 pushd %BUILD%\xz-%XZ_VERSION%
-msbuild.exe -nologo -v:m -p:configuration=ReleaseMT -p:platform=x64 -p:PlatformToolset=v143 windows\vs2019\liblzma.vcxproj || exit /b 1
-copy windows\vs2019\ReleaseMT\x64\liblzma\liblzma.lib %DEPEND%\lib\
+msbuild.exe -nologo -v:m -p:configuration=ReleaseMT -p:platform=x86 -p:PlatformToolset=v143 windows\vs2019\liblzma.vcxproj || exit /b 1
+copy windows\vs2019\ReleaseMT\x86\liblzma\liblzma.lib %DEPEND%\lib\
 mkdir %DEPEND%\include\lzma
 copy /y src\liblzma\api\lzma.h   %DEPEND%\include\
 copy /y src\liblzma\api\lzma\*.h %DEPEND%\include\lzma\
@@ -263,7 +263,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\zstd-%ZSTD_VERSION%\build\cmake ^
   -B %BUILD%\zstd-%ZSTD_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -283,7 +283,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libpng-%LIBPNG_VERSION%         ^
   -B %BUILD%\libpng-%LIBPNG_VERSION%         ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -300,7 +300,7 @@ rem
 cmake.exe -Wno-dev                                ^
   -S %BUILD%\libjpeg-turbo-%LIBJPEGTURBO_VERSION% ^
   -B %BUILD%\libjpeg-turbo-%LIBJPEGTURBO_VERSION% ^
-  -A x64 -T host=x64                              ^
+  -A x86 -T host=x86                              ^
   -G %MSVC_GENERATOR%                             ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%                 ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW              ^
@@ -319,7 +319,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libwebp-%LIBWEBP_VERSION%       ^
   -B %BUILD%\libwebp-%LIBWEBP_VERSION%       ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -355,7 +355,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\lerc-%LERC_VERSION%             ^
   -B %BUILD%\lerc-%LERC_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -372,7 +372,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\tiff-%TIFF_VERSION%             ^
   -B %BUILD%\tiff-%TIFF_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -425,7 +425,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libavif-%LIBAVIF_VERSION%       ^
   -B %BUILD%\libavif-%LIBAVIF_VERSION%\build ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -448,7 +448,7 @@ set CXXFLAGS=-DJXL_STATIC_DEFINE
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libjxl-%LIBJXL_VERSION%         ^
   -B %BUILD%\libjxl-%LIBJXL_VERSION%\build   ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -481,7 +481,7 @@ rem
 cmake.exe -Wno-dev                             ^
   -S %BUILD%\freetype-%FREETYPE_VERSION%       ^
   -B %BUILD%\freetype-%FREETYPE_VERSION%\build ^
-  -A x64 -T host=x64                           ^
+  -A x86 -T host=x86                           ^
   -G %MSVC_GENERATOR%                          ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%              ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW           ^
@@ -499,7 +499,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\harfbuzz-%HARFBUZZ_VERSION%     ^
   -B %BUILD%\harfbuzz-%HARFBUZZ_VERSION%     ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -516,7 +516,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libogg-%LIBOGG_VERSION%         ^
   -B %BUILD%\libogg-%LIBOGG_VERSION%         ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -533,7 +533,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libvorbis-%LIBVORBIS_VERSION%   ^
   -B %BUILD%\libvorbis-%LIBVORBIS_VERSION%   ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -551,7 +551,7 @@ echo. > %BUILD%\opus-%OPUS_VERSION%\opus_buildtype.cmake
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\opus-%OPUS_VERSION%             ^
   -B %BUILD%\opus-%OPUS_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -582,7 +582,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\flac-%FLAC_VERSION%             ^
   -B %BUILD%\flac-%FLAC_VERSION%             ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -603,7 +603,7 @@ copy %BUILD%\mpg123-%MPG123_VERSION%\ports\cmake\cmake\CheckCPUArch.c.in %BUILD%
 cmake.exe -Wno-dev                               ^
   -S %BUILD%\mpg123-%MPG123_VERSION%\ports\cmake ^
   -B %BUILD%\mpg123-%MPG123_VERSION%             ^
-  -A x64 -T host=x64                             ^
+  -A x86 -T host=x86                             ^
   -G %MSVC_GENERATOR%                            ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%                ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW             ^
@@ -631,7 +631,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\SDL                             ^
   -B %BUILD%\SDL\build                       ^
-  -A x64 -T host=x64                         ^
+  -A x86 -T host=x86                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%OUTPUT%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
