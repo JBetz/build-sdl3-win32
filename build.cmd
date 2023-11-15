@@ -212,7 +212,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\zlib-%ZLIB_VERSION%             ^
   -B %BUILD%\zlib-%ZLIB_VERSION%             ^
-  -A x86 -T host=x64                         ^
+  -A x64 -T host=x64                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
