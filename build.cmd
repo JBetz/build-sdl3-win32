@@ -172,7 +172,7 @@ call :get "https://storage.googleapis.com/downloads.webmproject.org/releases/web
 call :get "https://code.videolan.org/videolan/dav1d/-/archive/%DAV1D_VERSION%/dav1d-%DAV1D_VERSION%.tar.bz2"                           || exit /b 1
 call :get "https://github.com/AOMediaCodec/libavif/archive/refs/tags/v%LIBAVIF_VERSION%.tar.gz" libavif-%LIBAVIF_VERSION%.tar.gz       || exit /b 1
 call :get "https://github.com/libjxl/libjxl/archive/refs/tags/v%LIBJXL_VERSION%.tar.gz" libjxl-%LIBJXL_VERSION%.tar.gz                 || exit /b 1
-call :get "https://download.savannah.gnu.org/releases/freetype/freetype-%FREETYPE_VERSION%.tar.xz"                                     || exit /b 1
+call :get "https://sourceforge.net/projects/freetype/files/freetype2/%FREETYPE_VERSION%/freetype-%FREETYPE_VERSION%.tar.xz"                                     || exit /b 1
 call :get "https://github.com/harfbuzz/harfbuzz/releases/download/%HARFBUZZ_VERSION%/harfbuzz-%HARFBUZZ_VERSION%.tar.xz"               || exit /b 1
 call :get "https://downloads.xiph.org/releases/ogg/libogg-%LIBOGG_VERSION%.tar.xz"                                                     || exit /b 1
 call :get "https://downloads.xiph.org/releases/vorbis/libvorbis-%LIBVORBIS_VERSION%.tar.xz"                                            || exit /b 1
