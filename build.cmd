@@ -236,8 +236,8 @@ rem xz
 rem
 
 pushd %BUILD%\xz-%XZ_VERSION%
-msbuild.exe -nologo -v:m -p:configuration=ReleaseMT -p:platform=x86 -p:PlatformToolset=v143 windows\vs2019\liblzma.vcxproj || exit /b 1
-copy windows\vs2019\ReleaseMT\x86\liblzma\liblzma.lib %DEPEND%\lib\
+msbuild.exe -nologo -v:m -p:configuration=ReleaseMT -p:platform=Win32 -p:PlatformToolset=v143 windows\vs2019\liblzma.vcxproj || exit /b 1
+copy windows\vs2019\ReleaseMT\Win32\liblzma\liblzma.lib %DEPEND%\lib\
 mkdir %DEPEND%\include\lzma
 copy /y src\liblzma\api\lzma.h   %DEPEND%\include\
 copy /y src\liblzma\api\lzma\*.h %DEPEND%\include\lzma\
