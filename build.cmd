@@ -99,7 +99,7 @@ where /q yasm.exe || (
 
   if "%GITHUB_WORKFLOW%" neq "" (
     rem Install VS2010 redistributable
-    curl -sfLO https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x86.exe || exit /b 1
+    curl -sfLO https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe || exit /b 1
     start /wait vcredist_x86.exe /q /norestart
     del /q vcredist_x86.exe
   )
