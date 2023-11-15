@@ -126,7 +126,7 @@ where /Q cl.exe || (
     echo ERROR: Visual Studio installation not found
     exit /b 1
   )  
-  call "!VS!\VC\Auxiliary\Build\vcvarsall.bat" amd64 || exit /b 1
+  call "!VS!\VC\Auxiliary\Build\vcvars32.bat" || exit /b 1
 
   set MSVC_GENERATOR="Visual Studio 17 2022"
 )
