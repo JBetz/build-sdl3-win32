@@ -198,7 +198,7 @@ call :get "https://skia.googlesource.com/skcms/+archive/%SKCMS_COMMIT%.tar.gz" s
 move %BUILD%\google-brotli-%BROTLI_COMMIT%     %BUILD%\libjxl-%LIBJXL_VERSION%\third_party\brotli  1>nul 2>nul
 move %BUILD%\google-highway-%HIGHWAY_COMMIT%   %BUILD%\libjxl-%LIBJXL_VERSION%\third_party\highway 1>nul 2>nul
 
-call :clone SDL       "https://github.com/libsdl-org/SDL"       main || exit /b 1
+call :clone SDL       "https://github.com/icculus/SDL"          gpu-api || exit /b 1
 call :clone SDL_image "https://github.com/libsdl-org/SDL_image" main || exit /b 1
 call :clone SDL_mixer "https://github.com/libsdl-org/SDL_mixer" main || exit /b 1
 call :clone SDL_ttf   "https://github.com/libsdl-org/SDL_ttf"   main || exit /b 1
