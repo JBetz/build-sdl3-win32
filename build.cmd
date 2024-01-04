@@ -198,7 +198,8 @@ call :get "https://skia.googlesource.com/skcms/+archive/%SKCMS_COMMIT%.tar.gz" s
 move %BUILD%\google-brotli-%BROTLI_COMMIT%     %BUILD%\libjxl-%LIBJXL_VERSION%\third_party\brotli  1>nul 2>nul
 move %BUILD%\google-highway-%HIGHWAY_COMMIT%   %BUILD%\libjxl-%LIBJXL_VERSION%\third_party\highway 1>nul 2>nul
 
-call :clone SDL       "https://github.com/icculus/SDL"          gpu-api || exit /b 1
+call :clone SDL       "https://github.com/libsdl-org/SDL"       main || exit /b 1
+call :clone SDL_gpu   "https://github.com/icculus/SDL"          gpu-api || exit /b 1
 call :clone SDL_image "https://github.com/libsdl-org/SDL_image" main || exit /b 1
 call :clone SDL_mixer "https://github.com/libsdl-org/SDL_mixer" main || exit /b 1
 call :clone SDL_ttf   "https://github.com/libsdl-org/SDL_ttf"   main || exit /b 1
@@ -641,6 +642,22 @@ cmake.exe -Wno-dev                           ^
 cmake.exe --build %BUILD%\SDL\build --config Release --target install --parallel || exit /b 1
 
 rem
+rem SDL_gpu
+rem
+
+cmake.exe -Wno-dev                           ^
+  -S %BUILD%\SDL_gpu                             ^
+  -B %BUILD%\SDL_gpu\build                       ^
+  -A Win32 -T host=x64                         ^
+  -G %MSVC_GENERATOR%                        ^
+  -DCMAKE_INSTALL_PREFIX=%OUTPUT%            ^
+  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
+  -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+  -DBUILD_SHARED_LIBS=ON                     ^
+  || exit /b 1
+cmake.exe --build %BUILD%\SDL_gpu\build --config Release --target install --parallel || exit /b 1
+
+rem
 rem SDL_image
 rem dependencies: avif, libjxl, tiff, libjpeg-turbo, libpng, libwebp
 rem
@@ -733,6 +750,7 @@ rem output commits
 rem
 
 set /p SDL_COMMIT=<%BUILD%\SDL\.git\refs\heads\main
+set /p SDL_GPU_COMMIT=<%BUILD%\SDL_gpu\.git\refs\heads\main
 set /p SDL_IMAGE_COMMIT=<%BUILD%\SDL_image\.git\refs\heads\main
 set /p SDL_MIXER_COMMIT=<%BUILD%\SDL_mixer\.git\refs\heads\main
 set /p SDL_TTF_COMMIT=<%BUILD%\SDL_ttf\.git\refs\heads\main
@@ -740,6 +758,7 @@ set /p SDL_RTF_COMMIT=<%BUILD%\SDL_rtf\.git\refs\heads\main
 set /p SDL_NET_COMMIT=<%BUILD%\SDL_net\.git\refs\heads\main
 
 echo SDL commit %SDL_COMMIT% > %OUTPUT%\commits.txt
+echo SDL_gpu commit %SDL_GPU_COMMIT% > %OUTPUT%\commits.txt
 echo SDL_image commit %SDL_IMAGE_COMMIT% >> %OUTPUT%\commits.txt
 echo SDL_mixer commit %SDL_MIXER_COMMIT% >> %OUTPUT%\commits.txt
 echo SDL_ttf commit %SDL_TTF_COMMIT% >> %OUTPUT%\commits.txt
@@ -762,6 +781,7 @@ if "%GITHUB_WORKFLOW%" neq "" (
   >> %GITHUB_OUTPUT% echo OUTPUT_DATE=!OUTPUT_DATE!
 
   >> %GITHUB_OUTPUT% echo SDL_COMMIT=%SDL_COMMIT%
+  >> %GITHUB_OUTPUT% echo SDL_GPU_COMMIT=%SDL_GPU_COMMIT%
   >> %GITHUB_OUTPUT% echo SDL_IMAGE_COMMIT=%SDL_IMAGE_COMMIT%
   >> %GITHUB_OUTPUT% echo SDL_MIXER_COMMIT=%SDL_MIXER_COMMIT%
   >> %GITHUB_OUTPUT% echo SDL_TTF_COMMIT=%SDL_TTF_COMMIT%
