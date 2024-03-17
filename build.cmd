@@ -693,7 +693,7 @@ cmake.exe -Wno-dev                           ^
   -B %BUILD%\wavpack-%WAVPACK_VERSION%       ^
   -A Win32 -T host=x64                         ^
   -G %MSVC_GENERATOR%                        ^
-  -DCMAKE_ASM_COMPILER=ml64.exe              ^
+  -DCMAKE_ASM_COMPILER=ml.exe              ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
