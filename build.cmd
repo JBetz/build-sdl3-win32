@@ -403,12 +403,12 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libaom-%AOM_VERSION%            ^
   -B %BUILD%\libaom-%AOM_VERSION%\build      ^
-  -A Win32 -T host=x64                         ^
+  -A Win32 -T host=x64                       ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
-  -DAOM_TARGET_CPU=x86_64                    ^
+  -DAOM_TARGET_CPU=x86                       ^
   -DENABLE_EXAMPLES=OFF                      ^
   -DENABLE_TESTDATA=OFF                      ^
   -DENABLE_TESTS=OFF                         ^
