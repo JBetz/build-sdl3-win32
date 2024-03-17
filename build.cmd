@@ -403,7 +403,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libaom-%AOM_VERSION%            ^
   -B %BUILD%\libaom-%AOM_VERSION%\build      ^
-  -A x64 -T host=x64                         ^
+  -A Win32 -T host=x64                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -429,7 +429,7 @@ del "%BUILD%\libyuv-%LIBYUV_VERSION%\CMakeLists.txt.correct" "%BUILD%\libyuv-%LI
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\libyuv-%LIBYUV_VERSION%         ^
   -B %BUILD%\libyuv-%LIBYUV_VERSION%\build   ^
-  -A x64 -T host=x64                         ^
+  -A Win32 -T host=x64                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
@@ -673,7 +673,7 @@ rem
 cmake.exe -Wno-dev                               ^
   -S %BUILD%\libxmp-%LIBXMP_VERSION%             ^
   -B %BUILD%\libxmp-%LIBXMP_VERSION%             ^
-  -A x64 -T host=x64                             ^
+  -A Win32 -T host=x64                             ^
   -G %MSVC_GENERATOR%                            ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%                ^
   -DCMAKE_POLICY_DEFAULT_CMP0091=NEW             ^
@@ -691,7 +691,7 @@ rem
 cmake.exe -Wno-dev                           ^
   -S %BUILD%\wavpack-%WAVPACK_VERSION%       ^
   -B %BUILD%\wavpack-%WAVPACK_VERSION%       ^
-  -A x64 -T host=x64                         ^
+  -A Win32 -T host=x64                         ^
   -G %MSVC_GENERATOR%                        ^
   -DCMAKE_ASM_COMPILER=ml64.exe              ^
   -DCMAKE_INSTALL_PREFIX=%DEPEND%            ^
