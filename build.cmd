@@ -722,7 +722,7 @@ cmake.exe -Wno-dev                           ^
   -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
   -DBUILD_SHARED_LIBS=ON                     ^
   || exit /b 1
-cmake.exe --build %BUILD%\SDL\build --config Release --target install --parallel || exit /b 1
+cmake.exe --build %BUILD%\SDL\build --config Debug --target install --parallel || exit /b 1
 
 rem
 rem SDL_image
