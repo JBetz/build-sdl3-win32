@@ -773,7 +773,7 @@ rem
 pushd %BUILD%\SDL_ttf
 rc.exe -nologo src\version.rc || exit /b 1
 cl.exe -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZZ=1 ^
-  src\SDL_ttf.c src\version.res ^
+  src\*.c src\version.res ^
   -I%DEPEND%\include\freetype2 -I%DEPEND%\include\harfbuzz ^
   -link -dll -opt:icf -opt:ref -out:SDL3_ttf.dll ^
   SDL3.lib harfbuzz.lib freetype.lib libpng16_static.lib libbz2.lib zlibstatic.lib ^
