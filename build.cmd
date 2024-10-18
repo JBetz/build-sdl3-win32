@@ -781,6 +781,7 @@ cl.exe -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZZ=1 
 copy /y include\SDL3_ttf\SDL_ttf.h %OUTPUT%\include\SDL3\
 copy /y SDL3_ttf.dll               %OUTPUT%\bin\
 copy /y SDL3_ttf.lib               %OUTPUT%\lib\
+copy /y showfont                   %OUTPUT%\examples\
 popd
 
 rem
