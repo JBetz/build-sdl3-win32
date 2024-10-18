@@ -16,19 +16,19 @@ set ZLIB_VERSION=1.3.1
 set BZIP2_VERSION=1.0.8
 set XZ_VERSION=5.6.2
 set ZSTD_VERSION=1.5.6
-set LIBPNG_VERSION=1.6.43
-set LIBJPEGTURBO_VERSION=3.0.2
+set LIBPNG_VERSION=1.6.44
+set LIBJPEGTURBO_VERSION=3.0.4
 set JBIG_VERSION=2.1
 set LERC_VERSION=4.0.0
-set TIFF_VERSION=4.6.0
+set TIFF_VERSION=4.7.0
 set LIBWEBP_VERSION=1.4.0
-set AOM_VERSION=3.9.1
+set AOM_VERSION=3.10.0
 set LIBYUV_VERSION=464c51a
 set DAV1D_VERSION=1.4.3
 set LIBAVIF_VERSION=1.1.1
-set LIBJXL_VERSION=0.10.3
+set LIBJXL_VERSION=0.11.0
 set FREETYPE_VERSION=2.13.3
-set HARFBUZZ_VERSION=9.0.0
+set HARFBUZZ_VERSION=10.0.1
 set LIBOGG_VERSION=1.3.5
 set LIBVORBIS_VERSION=1.3.7
 set OPUS_VERSION=1.5.2
@@ -41,7 +41,7 @@ set WAVPACK_VERSION=5.7.0
 rem libjxl dependencies
 
 set BROTLI_COMMIT=36533a8
-set HIGHWAY_COMMIT=58b52a7
+set HIGHWAY_COMMIT=457c891
 set SKCMS_COMMIT=42030a7
 
 rem
@@ -773,7 +773,7 @@ rem
 pushd %BUILD%\SDL_ttf
 rc.exe -nologo src\version.rc || exit /b 1
 cl.exe -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZZ=1 -DSDLTTF_SAMPLES=ON^
-  src\SDL_ttf.c src\version.res ^
+  src\*.c src\version.res ^
   -I%DEPEND%\include\freetype2 -I%DEPEND%\include\harfbuzz ^
   -link -dll -opt:icf -opt:ref -out:SDL3_ttf.dll ^
   SDL3.lib harfbuzz.lib freetype.lib libpng16_static.lib libbz2.lib zlibstatic.lib ^
