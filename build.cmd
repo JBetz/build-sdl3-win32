@@ -772,7 +772,8 @@ rem
 
 pushd %BUILD%\SDL_ttf
 rc.exe -nologo src\version.rc || exit /b 1
-cl.exe /Zi -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZZ=1 ^
+cl.exe -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZZ=1 ^
+  -Zi -FdSDL3_ttf.pdb ^
   src\*.c src\version.res ^
   -I%DEPEND%\include\freetype2 -I%DEPEND%\include\harfbuzz ^
   -link -dll -opt:icf -opt:ref -out:SDL3_ttf.dll ^
@@ -781,7 +782,7 @@ cl.exe /Zi -MP -MT -O2 -Iinclude -DDLL_EXPORT -DNDEBUG -DWIN32 -DTTF_USE_HARFBUZ
 copy /y include\SDL3_ttf\SDL_ttf.h %OUTPUT%\include\SDL3\
 copy /y SDL3_ttf.dll               %OUTPUT%\bin\
 copy /y SDL3_ttf.lib               %OUTPUT%\lib\
-copy /y .*                         %OUTPUT%\other\
+copy /y SDL3_ttf.pdb               %OUTPUT%\bin\
 popd
 
 rem
