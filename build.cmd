@@ -24,7 +24,7 @@ set TIFF_VERSION=4.7.0
 set LIBWEBP_VERSION=1.4.0
 set AOM_VERSION=3.11.0
 set LIBYUV_VERSION=464c51a
-set DAV1D_VERSION=1.4.3
+set DAV1D_VERSION=1.5.0
 set LIBAVIF_VERSION=1.1.1
 set LIBJXL_VERSION=0.11.1
 set FREETYPE_VERSION=2.13.3
@@ -128,6 +128,78 @@ where /q ninja.exe || (
 )
 ninja.exe --version || exit /b 1
 
+rem
+rem Downloading & Unpacking
+rem
+
+call :get "https://github.com/madler/zlib/releases/download/v%ZLIB_VERSION%/zlib-%ZLIB_VERSION%.tar.xz"                                                      || exit /b 1
+call :get "https://sourceware.org/pub/bzip2/bzip2-%BZIP2_VERSION%.tar.gz"                                                                                    || exit /b 1
+call :get "https://github.com/tukaani-project/xz/releases/download/v%XZ_VERSION%/xz-%XZ_VERSION%.tar.xz"                                                     || exit /b 1
+call :get "https://github.com/facebook/zstd/releases/download/v%ZSTD_VERSION%/zstd-%ZSTD_VERSION%.tar.gz"                                                    || exit /b 1
+call :get "https://download.sourceforge.net/libpng/libpng-%LIBPNG_VERSION%.tar.xz"                                                                           || exit /b 1
+call :get "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/%LIBJPEGTURBO_VERSION%/libjpeg-turbo-%LIBJPEGTURBO_VERSION%.tar.gz"              || exit /b 1
+call :get "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/jbigkit-%JBIG_VERSION%.tar.gz"                                                                   || exit /b 1
+call :get "https://github.com/Esri/lerc/archive/refs/tags/v%LERC_VERSION%.tar.gz" lerc-%LERC_VERSION%.tar.gz                                                 || exit /b 1
+call :get "https://download.osgeo.org/libtiff/tiff-%TIFF_VERSION%.tar.gz"                                                                                    || exit /b 1
+call :get "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-%LIBWEBP_VERSION%.tar.gz"                                          || exit /b 1
+call :get "https://storage.googleapis.com/aom-releases/libaom-%AOM_VERSION%.tar.gz"                                                                          || exit /b 1
+call :get "https://chromium.googlesource.com/libyuv/libyuv/+archive/%LIBYUV_VERSION%.tar.gz" libyuv-%LIBYUV_VERSION%.tar.gz %SOURCE%\libyuv-%LIBYUV_VERSION% || exit /b 1
+call :get "https://downloads.videolan.org/pub/videolan/dav1d/%DAV1D_VERSION%/dav1d-%DAV1D_VERSION%.tar.xz"                                                   || exit /b 1
+call :get "https://github.com/AOMediaCodec/libavif/archive/refs/tags/v%LIBAVIF_VERSION%.tar.gz" libavif-%LIBAVIF_VERSION%.tar.gz                             || exit /b 1
+call :get "https://github.com/libjxl/libjxl/archive/refs/tags/v%LIBJXL_VERSION%.tar.gz" libjxl-%LIBJXL_VERSION%.tar.gz                                       || exit /b 1
+call :get "https://download.savannah.gnu.org/releases/freetype/freetype-%FREETYPE_VERSION%.tar.xz"                                                           || exit /b 1
+call :get "https://github.com/harfbuzz/harfbuzz/releases/download/%HARFBUZZ_VERSION%/harfbuzz-%HARFBUZZ_VERSION%.tar.xz"                                     || exit /b 1
+call :get "https://downloads.xiph.org/releases/ogg/libogg-%LIBOGG_VERSION%.tar.xz"                                                                           || exit /b 1
+call :get "https://downloads.xiph.org/releases/vorbis/libvorbis-%LIBVORBIS_VERSION%.tar.xz"                                                                  || exit /b 1
+call :get "https://downloads.xiph.org/releases/opus/opus-%OPUS_VERSION%.tar.gz"                                                                              || exit /b 1
+call :get "https://downloads.xiph.org/releases/opus/opusfile-%OPUSFILE_VERSION%.tar.gz"                                                                      || exit /b 1
+call :get "https://downloads.xiph.org/releases/flac/flac-%FLAC_VERSION%.tar.xz"                                                                              || exit /b 1
+call :get "https://download.sourceforge.net/mpg123/mpg123-%MPG123_VERSION%.tar.bz2"                                                                          || exit /b 1
+call :get "https://github.com/libxmp/libxmp/releases/download/libxmp-%LIBXMP_VERSION%/libxmp-%LIBXMP_VERSION%.tar.gz"                                        || exit /b 1
+call :get "https://github.com/libgme/game-music-emu/archive/refs/tags/%LIBGME_VERSION%.tar.gz" libgme-%LIBGME_VERSION%.tar.gz                                || exit /b 1
+call :get "https://github.com/dbry/WavPack/releases/download/%WAVPACK_VERSION%/wavpack-%WAVPACK_VERSION%.tar.xz"                                             || exit /b 1
+call :get "https://github.com/libsndfile/libsndfile/releases/download/%LIBSNDFILE_VERSION%/libsndfile-%LIBSNDFILE_VERSION%.tar.xz"                           || exit /b 1
+
+rd /s /q %SOURCE%\libjxl-%LIBJXL_VERSION%\third_party\brotli  1>nul 2>nul
+rd /s /q %SOURCE%\libjxl-%LIBJXL_VERSION%\third_party\highway 1>nul 2>nul
+
+call :get "https://github.com/google/brotli/tarball/%BROTLI_COMMIT%"           google-brotli-%BROTLI_COMMIT%.tar.gz                                           || exit /b 1
+call :get "https://github.com/google/highway/tarball/%HIGHWAY_COMMIT%"         google-highway-%HIGHWAY_COMMIT%.tar.gz                                         || exit /b 1
+call :get "https://skia.googlesource.com/skcms/+archive/%SKCMS_COMMIT%.tar.gz" skcms-%SKCMS_COMMIT%.tar.gz %SOURCE%\libjxl-%LIBJXL_VERSION%\third_party\skcms || exit /b 1
+
+move %SOURCE%\google-brotli-%BROTLI_COMMIT%   %SOURCE%\libjxl-%LIBJXL_VERSION%\third_party\brotli  1>nul 2>nul
+move %SOURCE%\google-highway-%HIGHWAY_COMMIT% %SOURCE%\libjxl-%LIBJXL_VERSION%\third_party\highway 1>nul 2>nul
+
+call :clone SDL             "https://github.com/libsdl-org/SDL"             main || exit /b 1
+call :clone SDL_image       "https://github.com/libsdl-org/SDL_image"       main || exit /b 1
+call :clone SDL_mixer       "https://github.com/libsdl-org/SDL_mixer"       main || exit /b 1
+call :clone SDL_ttf         "https://github.com/libsdl-org/SDL_ttf"         main || exit /b 1
+call :clone SDL_rtf         "https://github.com/libsdl-org/SDL_rtf"         main || exit /b 1
+call :clone SDL_net         "https://github.com/libsdl-org/SDL_net"         main || exit /b 1
+call :clone SDL_shadercross "https://github.com/libsdl-org/SDL_shadercross" main || exit /b 1
+call :clone SDL2_compat     "https://github.com/libsdl-org/sdl2-compat"     main || exit /b 1
+
+echo Updating SDL_shadercross submodules
+call git -C source\SDL_shadercross submodule update --init --recursive --quiet || exit /b 1
+call git -C source\SDL_shadercross submodule foreach git reset --quiet --hard HEAD || exit /b 1
+call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
+call git apply -p1 --directory=source/SDL_shadercross/external/DirectXShaderCompiler patches/DirectXShaderCompiler.patch || exit /b 1
+
+pushd %SOURCE%\libyuv-%LIBYUV_VERSION%
+echo CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12) > "CMakeLists.txt.correct"
+type "CMakeLists.txt"                      >> "CMakeLists.txt.correct"
+move /y "CMakeLists.txt.correct"              "CMakeLists.txt"
+popd
+
+pushd %SOURCE%\game-music-emu-%LIBGME_VERSION%
+echo CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12) > "CMakeLists.txt.correct"
+type "CMakeLists.txt"                      >> "CMakeLists.txt.correct"
+move /y "CMakeLists.txt.correct"              "CMakeLists.txt"
+popd
+
+pushd %SOURCE%\libjpeg-turbo-%LIBJPEGTURBO_VERSION%
+python.exe -c "print(open('CMakeLists.txt').read().replace('${CMAKE_SYSTEM_PROCESSOR}','""${CMAKE_SYSTEM_PROCESSOR}""'), file=open('CMakeLists.txt', 'w'))"
+popd
 
 rem
 rem MSVC environment
