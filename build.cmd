@@ -182,31 +182,25 @@ call :clone SDL2_compat     "https://github.com/libsdl-org/sdl2-compat"     main
 echo Updating SDL_shadercross submodules
 call git -C source\SDL_shadercross submodule update --init --recursive --quiet || exit /b 1
 call git -C source\SDL_shadercross submodule foreach git reset --quiet --hard HEAD || exit /b 1
+
+rem
+rem apply patches
+rem 
+
 call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
 call git apply -p1 --directory=source/SDL_shadercross/external/DirectXShaderCompiler patches/DirectXShaderCompiler.patch || exit /b 1
-
-pushd %SOURCE%\libyuv-%LIBYUV_VERSION%
-echo CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12) > "CMakeLists.txt.correct"
-type "CMakeLists.txt"                      >> "CMakeLists.txt.correct"
-move /y "CMakeLists.txt.correct"              "CMakeLists.txt"
-popd
-
-pushd %SOURCE%\game-music-emu-%LIBGME_VERSION%
-echo CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12) > "CMakeLists.txt.correct"
-type "CMakeLists.txt"                      >> "CMakeLists.txt.correct"
-move /y "CMakeLists.txt.correct"              "CMakeLists.txt"
-popd
-
-pushd %SOURCE%\libjpeg-turbo-%LIBJPEGTURBO_VERSION%
-python.exe -c "print(open('CMakeLists.txt').read().replace('${CMAKE_SYSTEM_PROCESSOR}','""${CMAKE_SYSTEM_PROCESSOR}""'), file=open('CMakeLists.txt', 'w'))"
-popd
+call git apply -p1 --directory=source/libyuv-%LIBYUV_VERSION%                        patches/libyuv.patch                || exit /b 1
+call git apply -p1 --directory=source/game-music-emu-%LIBGME_VERSION%                patches/libgme.patch                || exit /b 1
+call git apply -p1 --directory=source/libjpeg-turbo-%LIBJPEGTURBO_VERSION%           patches/libjpeg-turbo.patch         || exit /b 1
+call git apply -p1 --directory=source/flac-%FLAC_VERSION%                            patches/flac.patch                  || exit /b 1
 
 rem
 rem MSVC environment
 rem
 
-where /Q cl.exe || (
-  set __VSCMD_ARG_NO_LOGO=1
+set OLD_PATH=%PATH%
+
+where /q cl.exe || (
   for /f "tokens=*" %%i in ('"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop -property installationPath') do set VS=%%i
   if "!VS!" equ "" (
     echo ERROR: Visual Studio installation not found
@@ -468,9 +462,7 @@ cmake.exe -Wno-dev                           ^
   || exit /b 1
 ninja.exe -C %BUILD%\tiff-%TIFF_VERSION% install || exit /b 1
 
-pushd %DEPEND%
-python.exe -c "print(open('lib/cmake/tiff/TiffTargets.cmake').read().replace(r'\$<LINK_ONLY:ZLIB::ZLIB>;\$<LINK_ONLY:JPEG::JPEG>;\$<LINK_ONLY:JBIG::JBIG>;\$<LINK_ONLY:LERC::LERC>;\$<LINK_ONLY:liblzma::liblzma>;\$<LINK_ONLY:ZSTD::ZSTD>','zlibstatic.lib;jpeg-static.lib;jbig.lib;Lerc.lib;lzma.lib;zstd_static.lib'), file=open('lib/cmake/tiff/TiffTargets.cmake', 'w'))"
-popd
+call git apply -p1 --directory=depend-%TARGET_ARCH% patches/tiff.patch || exit /b 1
 
 rem
 rem aom
@@ -724,7 +716,7 @@ cmake.exe -Wno-dev                           ^
   -DBUILD_DOCS=OFF                           ^
   -DINSTALL_MANPAGES=OFF                     ^
   || exit /b 1
-cmake.exe --build %BUILD%\flac-%FLAC_VERSION% --config Release --target install --parallel || exit /b 1
+ninja.exe -C %BUILD%\flac-%FLAC_VERSION% install || exit /b 1
 
 rem
 rem mpg123
