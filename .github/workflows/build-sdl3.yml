@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        arch: [x64, arm64]
+        arch: [x86]
 
     outputs:
       OUTPUT_DATE:            ${{ steps.build.outputs.OUTPUT_DATE }}

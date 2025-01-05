@@ -14,12 +14,8 @@ diff --git a/src/SDL_shadercross.c b/src/SDL_shadercross.c
 index 676883b..fc33289 100644
 --- a/src/SDL_shadercross.c
 +++ b/src/SDL_shadercross.c
-@@ -308,6 +308,8 @@ struct IDxcUtils
- 
- /* DXCompiler */
+@@ -310,6 +310,8 @@ struct IDxcUtils
  #if defined(SDL_PLATFORM_XBOXONE) || defined(SDL_PLATFORM_XBOXSERIES) || defined(SDL_PLATFORM_WINDOWS)
-+extern HRESULT DXC_Init(void);
-+extern void DXC_Done(void);
  extern HRESULT __stdcall DxcCreateInstance(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
  #else
  extern HRESULT DxcCreateInstance(REFCLSID rclsid, REFIID riid, LPVOID *ppv);
