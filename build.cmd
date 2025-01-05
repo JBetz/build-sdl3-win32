@@ -15,6 +15,8 @@ if "%1" equ "x64" (
   set TARGET_ARCH=x64
 ) else if "%1" equ "arm64" (
   set TARGET_ARCH=arm64
+) else if "%1" equ "x86" (
+  set TARGET_ARCH=x86
 ) else if "%1" neq "" (
   echo Unknown target "%1" architecture!
   exit /b 1
@@ -173,6 +175,34 @@ if "%TARGET_ARCH%" equ "x64" (
       curl -sfLO https://download.microsoft.com/download/3/2/2/3224B87F-CFA0-4E70-BDA3-3DE650EFEBA5/vcredist_x64.exe || exit /b 1
       start /wait vcredist_x64.exe /q /norestart
       del /q vcredist_x64.exe
+    )
+  )
+  yasm.exe --version || exit /b 1
+) else if "%TARGET_ARCH%" equ "x86" (
+  rem nasm is used for libjpeg-turbo and dav1d
+  where /q nasm.exe || (
+    echo Downloading nasm
+    pushd %DOWNLOAD%
+    curl.exe -sfLo nasm.zip "https://www.nasm.us/pub/nasm/releasebuilds/%NASM_VERSION%/win32/nasm-%NASM_VERSION%-win32.zip"
+    %SZIP% x -bb0 -y nasm.zip nasm-%NASM_VERSION%\nasm.exe 1>nul 2>nul || exit /b 1
+    move nasm-%NASM_VERSION%\nasm.exe nasm.exe 1>nul 2>nul
+    rd /s /q nasm-%NASM_VERSION% 1>nul 2>nul
+    popd
+  )
+  nasm.exe --version || exit /b 1
+
+  rem yasm is used for mpg123
+  where /q yasm.exe || (
+    echo Downloading yasm
+    pushd %DOWNLOAD%
+    curl -sfLo yasm.exe https://www.tortall.net/projects/yasm/releases/yasm-%YASM_VERSION%-win32.exe || exit /b 1
+    popd
+
+    if "%GITHUB_WORKFLOW%" neq "" (
+      rem Install VS2010 redistributable
+      curl -sfLO https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe || exit /b 1
+      start /wait vcredist_x86.exe /q /norestart
+      del /q vcredist_x86.exe
     )
   )
   yasm.exe --version || exit /b 1
