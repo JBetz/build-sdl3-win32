@@ -1069,43 +1069,45 @@ rem
 rem SDL_shadercross
 rem
 
-if "%HOST_ARCH%" neq "%TARGET_ARCH%" (
-  set PATH=!OLD_PATH!
-  call "!VS!\Common7\Tools\VsDevCmd.bat" -arch=!HOST_ARCH! -host_arch=!HOST_ARCH! -startdir=none -no_logo || exit /b 1
+if "%TARGET_ARCH%" neq "x86" (
+  if "%HOST_ARCH%" neq "%TARGET_ARCH%" (
+    set PATH=!OLD_PATH!
+    call "!VS!\Common7\Tools\VsDevCmd.bat" -arch=!HOST_ARCH! -host_arch=!HOST_ARCH! -startdir=none -no_logo || exit /b 1
 
-  cmake.exe                                                          ^
-    -G Ninja                                                         ^
-    -S %SOURCE%\SDL_shadercross\external\DirectXShaderCompiler       ^
-    -B %BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native ^
-    -D CMAKE_BUILD_TYPE=Release                                      ^
-    -D BUILD_SHARED_LIBS=OFF                                         ^
-    -D LLVM_TARGETS_TO_BUILD=None                                    ^
-    -D LLVM_ENABLE_WARNINGS=OFF                                      ^
-    -D LLVM_ENABLE_EH=ON                                             ^
-    -D LLVM_ENABLE_RTTI=ON                                           ^
+    cmake.exe                                                          ^
+      -G Ninja                                                         ^
+      -S %SOURCE%\SDL_shadercross\external\DirectXShaderCompiler       ^
+      -B %BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native ^
+      -D CMAKE_BUILD_TYPE=Release                                      ^
+      -D BUILD_SHARED_LIBS=OFF                                         ^
+      -D LLVM_TARGETS_TO_BUILD=None                                    ^
+      -D LLVM_ENABLE_WARNINGS=OFF                                      ^
+      -D LLVM_ENABLE_EH=ON                                             ^
+      -D LLVM_ENABLE_RTTI=ON                                           ^
+      || exit /b 1
+    ninja.exe -C %BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native llvm-tblgen clang-tblgen || exit /b 1
+
+    set PATH=!OLD_PATH!
+    call "!VS!\Common7\Tools\VsDevCmd.bat" -arch=!TARGET_ARCH! -host_arch=!HOST_ARCH! -startdir=none -no_logo || exit /b 1
+    set PATH=%BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native\bin;!PATH!
+  )
+
+  cmake.exe %CMAKE_COMMON_ARGS%             ^
+    -S %SOURCE%\SDL_shadercross             ^
+    -B %BUILD%\SDL_shadercross              ^
+    -D CMAKE_INSTALL_PREFIX=%OUTPUT%        ^
+    -D CMAKE_PREFIX_PATH=%DEPEND%           ^
+    -D SDL3_ROOT=%OUTPUT%                   ^
+    -D SDLSHADERCROSS_CLI=ON                ^
+    -D SDLSHADERCROSS_VENDORED=ON           ^
+    -D SDLSHADERCROSS_SHARED=ON             ^
+    -D SDLSHADERCROSS_STATIC=OFF            ^
+    -D SDLSHADERCROSS_SPIRVCROSS_SHARED=OFF ^
+    -D SDLSHADERCROSS_INSTALL=ON            ^
+    -D SDLSHADERCROSS_INSTALL_CPACK=OFF     ^
     || exit /b 1
-  ninja.exe -C %BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native llvm-tblgen clang-tblgen || exit /b 1
-
-  set PATH=!OLD_PATH!
-  call "!VS!\Common7\Tools\VsDevCmd.bat" -arch=!TARGET_ARCH! -host_arch=!HOST_ARCH! -startdir=none -no_logo || exit /b 1
-  set PATH=%BUILD%\SDL_shadercross\external\DirectXShaderCompiler-native\bin;!PATH!
+  ninja.exe -C %BUILD%\SDL_shadercross install || exit /b 1
 )
-
-cmake.exe %CMAKE_COMMON_ARGS%             ^
-  -S %SOURCE%\SDL_shadercross             ^
-  -B %BUILD%\SDL_shadercross              ^
-  -D CMAKE_INSTALL_PREFIX=%OUTPUT%        ^
-  -D CMAKE_PREFIX_PATH=%DEPEND%           ^
-  -D SDL3_ROOT=%OUTPUT%                   ^
-  -D SDLSHADERCROSS_CLI=ON                ^
-  -D SDLSHADERCROSS_VENDORED=ON           ^
-  -D SDLSHADERCROSS_SHARED=ON             ^
-  -D SDLSHADERCROSS_STATIC=OFF            ^
-  -D SDLSHADERCROSS_SPIRVCROSS_SHARED=OFF ^
-  -D SDLSHADERCROSS_INSTALL=ON            ^
-  -D SDLSHADERCROSS_INSTALL_CPACK=OFF     ^
-  || exit /b 1
-ninja.exe -C %BUILD%\SDL_shadercross install || exit /b 1
 
 rem
 rem SDL2_compat
