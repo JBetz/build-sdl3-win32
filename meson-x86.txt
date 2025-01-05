@@ -1,0 +1,12 @@
+[binaries]
+c = ['clang-cl.exe', '--target=i686-pc-windows-msvc']
+cpp = ['clang-cl.exe', '--target=i686-pc-windows-msvc']
+
+[host_machine]
+system = 'windows'
+cpu_family = 'x86_64'
+cpu = 'x86_64'
+endian = 'little'
+
+[properties]
+skip_sanity_check = true
