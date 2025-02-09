@@ -280,7 +280,7 @@ rem
 rem apply patches
 rem 
 
-@REM call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
+call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
 call git apply -p1 --directory=source/SDL_shadercross/external/DirectXShaderCompiler patches/DirectXShaderCompiler.patch || exit /b 1
 call git apply -p1 --directory=source/libyuv-%LIBYUV_VERSION%                        patches/libyuv.patch                || exit /b 1
 call git apply -p1 --directory=source/game-music-emu-%LIBGME_VERSION%                patches/libgme.patch                || exit /b 1
