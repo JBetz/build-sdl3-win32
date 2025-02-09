@@ -280,7 +280,7 @@ rem
 rem apply patches
 rem 
 
-@REM call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
+call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
 call git apply -p1 --directory=source/SDL_shadercross/external/DirectXShaderCompiler patches/DirectXShaderCompiler.patch || exit /b 1
 call git apply -p1 --directory=source/libyuv-%LIBYUV_VERSION%                        patches/libyuv.patch                || exit /b 1
 call git apply -p1 --directory=source/game-music-emu-%LIBGME_VERSION%                patches/libgme.patch                || exit /b 1
@@ -900,6 +900,7 @@ cmake.exe %CMAKE_COMMON_ARGS%      ^
   -B %BUILD%\SDL                   ^
   -D CMAKE_INSTALL_PREFIX=%OUTPUT% ^
   -D BUILD_SHARED_LIBS=ON          ^
+  -g                               ^
   || exit /b 1
 ninja.exe -C %BUILD%\SDL install || exit /b 1
 
