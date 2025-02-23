@@ -900,7 +900,6 @@ cmake.exe %CMAKE_COMMON_ARGS%      ^
   -B %BUILD%\SDL                   ^
   -D CMAKE_INSTALL_PREFIX=%OUTPUT% ^
   -D BUILD_SHARED_LIBS=ON          ^
-  -g                               ^
   || exit /b 1
 ninja.exe -C %BUILD%\SDL install || exit /b 1
 
