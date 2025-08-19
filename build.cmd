@@ -30,34 +30,34 @@ rem
 
 set NASM_VERSION=2.16.03
 set YASM_VERSION=1.3.0
-set NINJA_VERSION=1.12.1
+set NINJA_VERSION=1.13.1
 
 set ZLIB_VERSION=1.3.1
 set BZIP2_VERSION=1.0.8
-set XZ_VERSION=5.6.4
-set ZSTD_VERSION=1.5.6
-set LIBPNG_VERSION=1.6.47
-set LIBJPEGTURBO_VERSION=3.1.0
+set XZ_VERSION=5.8.1
+set ZSTD_VERSION=1.5.7
+set LIBPNG_VERSION=1.6.50
+set LIBJPEGTURBO_VERSION=3.1.1
 set JBIG_VERSION=2.1
 set LERC_VERSION=4.0.0
 set TIFF_VERSION=4.7.0
-set LIBWEBP_VERSION=1.5.0
-set AOM_VERSION=3.12.0
+set LIBWEBP_VERSION=1.6.0
+set AOM_VERSION=3.12.1
 set LIBYUV_VERSION=464c51a
 set DAV1D_VERSION=1.5.1
-set LIBAVIF_VERSION=1.1.1
+set LIBAVIF_VERSION=1.3.0
 set LIBJXL_VERSION=0.11.1
 set FREETYPE_VERSION=2.13.3
-set HARFBUZZ_VERSION=10.3.0
-set LIBOGG_VERSION=1.3.5
+set HARFBUZZ_VERSION=11.4.1
+set LIBOGG_VERSION=1.3.6
 set LIBVORBIS_VERSION=1.3.7
 set OPUS_VERSION=1.5.2
 set OPUSFILE_VERSION=0.12
 set FLAC_VERSION=1.5.0
-set MPG123_VERSION=1.32.10
-set LIBXMP_VERSION=4.6.0
-set LIBGME_VERSION=0.6.3
-set WAVPACK_VERSION=5.7.0
+set MPG123_VERSION=1.33.1
+set LIBXMP_VERSION=4.6.3
+set LIBGME_VERSION=0.6.4
+set WAVPACK_VERSION=5.8.1
 set LIBSNDFILE_VERSION=1.2.2
 
 rem libjxl dependencies
@@ -283,7 +283,6 @@ rem
 call git apply -p1 --directory=source/SDL_shadercross                                patches/SDL_shadercross.patch       || exit /b 1
 call git apply -p1 --directory=source/SDL_shadercross/external/DirectXShaderCompiler patches/DirectXShaderCompiler.patch || exit /b 1
 call git apply -p1 --directory=source/libyuv-%LIBYUV_VERSION%                        patches/libyuv.patch                || exit /b 1
-call git apply -p1 --directory=source/game-music-emu-%LIBGME_VERSION%                patches/libgme.patch                || exit /b 1
 call git apply -p1 --directory=source/libjpeg-turbo-%LIBJPEGTURBO_VERSION%           patches/libjpeg-turbo.patch         || exit /b 1
 call git apply -p1 --directory=source/flac-%FLAC_VERSION%                            patches/flac.patch                  || exit /b 1
 
@@ -313,6 +312,7 @@ set CMAKE_COMMON_ARGS=-Wno-dev                ^
   -D CMAKE_POLICY_DEFAULT_CMP0074=NEW         ^
   -D CMAKE_POLICY_DEFAULT_CMP0091=NEW         ^
   -D CMAKE_POLICY_DEFAULT_CMP0092=NEW         ^
+  -D CMAKE_POLICY_VERSION_MINIMUM=3.5         ^
   -D CMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
 
 if "%TARGET_ARCH%" equ "arm64" (
@@ -372,6 +372,8 @@ cmake.exe %CMAKE_COMMON_ARGS%      ^
   -B %BUILD%\xz-%XZ_VERSION%       ^
   -D CMAKE_INSTALL_PREFIX=%DEPEND% ^
   -D BUILD_SHARED_LIBS=OFF         ^
+  -D XZ_NLS=OFF                    ^
+  -D XZ_THREADS=vista              ^
   || exit /b 1
 ninja.exe -C %BUILD%\xz-%XZ_VERSION% install || exit /b 1
 
@@ -458,7 +460,7 @@ cmake.exe %CMAKE_COMMON_ARGS%           ^
   -D WEBP_BUILD_IMG2WEBP=OFF            ^
   -D WEBP_BUILD_VWEBP=OFF               ^
   -D WEBP_BUILD_WEBPINFO=OFF            ^
-  -D WEBP_BUILD_LIBWEBPMUX=OFF          ^
+  -D WEBP_BUILD_LIBWEBPMUX=ON           ^
   -D WEBP_BUILD_WEBPMUX=OFF             ^
   -D WEBP_BUILD_EXTRAS=OFF              ^
   -D WEBP_BUILD_WEBP_JS=OFF             ^
@@ -533,7 +535,8 @@ cmake.exe %CMAKE_COMMON_ARGS%              ^
   || exit /b 1
 ninja.exe -C %BUILD%\tiff-%TIFF_VERSION% install || exit /b 1
 
-call git apply -p1 --directory=depend-%TARGET_ARCH% patches/tiff.patch || exit /b 1
+call git apply -p1 --directory=depend-%TARGET_ARCH% patches/tiff.patch || ^
+call git apply -p1 --directory=depend-%TARGET_ARCH% patches/tiff2.patch || exit /b 1
 
 rem
 rem aom
