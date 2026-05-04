@@ -1,4 +1,6 @@
-Automatic weekly build of [SDL3][] and its helper libraries for 32-bit Windows.
+**NOTE: The automatic weekly builds for this repo have been disabled now that SDL3 has been officially released.**
+
+Scripts and workflows for producing builds of [SDL3][] and its helper libraries for 32-bit Windows.
 
 Build produces shared libraries (.dll files) that are linked statically to their dependencies.
 
